@@ -9,15 +9,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { sendRequest } from "../utils/sendRequest";
-import {
-  ActionIcon,
-  Badge,
-  em,
-  Group,
-  Select,
-  Table,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Badge, Group, Select, Table, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -134,16 +126,21 @@ export default function BooksTableRow({
 
   const handleSharePreview = async (bookId, email, duration) => {
     try {
+      setIsSharing(true);
+      const body = duration ? { email, durationMs: duration } : { email };
       await sendRequest({
         url: `/preview-share/${bookId}`,
         method: "post",
-        body: { email, duration },
+        body,
       });
+
       shareModalClose();
-      toast.success(`You share your preview with ${email} now `);
+      toast.success(`Preview shared with ${email}`);
     } catch (error) {
       console.error(error);
       toast.error("Couldn't share your preview, something went wrong!");
+    } finally {
+      setIsSharing(false);
     }
   };
   const handleDeleteConfirmed = async () => {

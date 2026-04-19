@@ -1,0 +1,141 @@
+.notification-bell__button {
+  color: var(--app-navbar-toggle-color);
+  background: var(--app-navbar-toggle-bg);
+  border: 1px solid var(--app-navbar-toggle-border);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.notification-bell__button:hover {
+  color: var(--app-navbar-link-hover-color);
+  background: var(--app-navbar-toggle-bg-hover);
+  transform: translateY(-1px);
+}
+
+.notification-bell__indicator {
+  min-width: 1rem;
+  height: 1rem;
+  padding-inline: 0.28rem;
+  color: var(--mantine-color-brick-0);
+  background: var(--mantine-color-brick-6);
+  border: 2px solid var(--app-navbar-bg);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.notification-popover {
+  overflow: hidden;
+  color: var(--app-menu-text);
+  background: var(--app-menu-bg);
+  border: 1px solid var(--app-menu-border);
+  box-shadow: var(--app-menu-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.notification-popover__header {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-copper-0) 34%,
+    transparent
+  );
+}
+
+.notification-popover__title {
+  color: var(--app-menu-text);
+}
+
+.notification-popover__divider {
+  border-color: var(--app-menu-divider);
+}
+
+.notification-popover__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--mantine-color-brick-5);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--mantine-color-brick-2) 38%, transparent);
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.notification-popover__status-dot--live {
+  background: var(--mantine-color-moss-6);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--mantine-color-moss-2) 38%, transparent);
+}
+
+.notification-popover__status-text,
+.notification-item__time,
+.notification-item__message,
+.notification-empty {
+  color: var(--app-menu-muted);
+}
+
+.notification-item {
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  background: transparent;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.notification-item:hover {
+  background: var(--app-menu-hover-bg);
+}
+
+.notification-item--unread {
+  border-left-color: var(--mantine-color-copper-5);
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-copper-0) 58%,
+    transparent
+  );
+}
+
+.notification-item--unread:hover {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-copper-1) 68%,
+    transparent
+  );
+}
+
+.notification-item__title {
+  color: var(--app-menu-text);
+}
+
+.notification-empty svg {
+  color: var(--app-menu-muted);
+  opacity: 0.45;
+}
+
+[data-mantine-color-scheme="dark"] .notification-popover__header {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-copper-9) 42%,
+    transparent
+  );
+}
+
+[data-mantine-color-scheme="dark"] .notification-item--unread {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-copper-9) 36%,
+    transparent
+  );
+}
+
+[data-mantine-color-scheme="dark"] .notification-item--unread:hover {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-copper-8) 42%,
+    transparent
+  );
+}

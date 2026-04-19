@@ -14,6 +14,7 @@ import { useAuthStore } from "../../stores/authStore";
 import { useBooksStore } from "../../stores/booksStore";
 import { sendRequest } from "../../utils/sendRequest";
 import "./Navbar.css";
+import { NotificationBell } from "../NotificationBell";
 
 const getNavLinkClassName = ({ isActive }) =>
   `app-navbar__link${isActive ? " app-navbar__link--active" : ""}`;
@@ -118,6 +119,7 @@ export default function Navbar() {
             <div className="app-navbar__auth-actions">
               {isLoggedIn ? (
                 <>
+                  <NotificationBell />
                   <NavLink to="/profile" className={getNavLinkClassName}>
                     Profile
                   </NavLink>
