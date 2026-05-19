@@ -33,20 +33,8 @@ export default function BookDetail() {
   const [isUploading, setIsUploading] = useState(false);
   // find book either in route state or in books store previously fetched.
   useEffect(() => {
-    const cachedBook =
-      location.state?.book ||
-      useBooksStore.getState().booksData.books.find((b) => b._id === id);
-
-    if (cachedBook) {
-      setBook(cachedBook);
-    }
-
-    const shouldFetchBook =
-      location.state?.fetchBook || (!location.state?.fetchBook && !cachedBook);
-    if (shouldFetchBook) {
-      fetchBookById(id);
-    }
-  }, [fetchBookById, id, location.state, setBook]);
+    fetchBookById(id);
+  }, [fetchBookById, id]);
 
   const deleteBook = useBooksStore((s) => s.deleteBook);
 

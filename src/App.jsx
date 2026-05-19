@@ -15,6 +15,8 @@ import { OnBoarding } from "./pages/OnBoarding.jsx";
 import AuthorBooks from "./pages/AuthorBooks.jsx";
 import ChapterEdit from "./pages/ChapterEdit.jsx";
 import WorkspaceLayout from "./layouts/WorkspaceLayout.jsx";
+import AdminRequests from "./pages/AdminRequests.jsx";
+import AuthorRequests from "./pages/AuthorRequests.jsx";
 
 export default function App() {
   const navigate = useNavigate();
@@ -74,6 +76,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AuthorBooks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="author/requests"
+          element={
+            <ProtectedRoute allowedRoles={["author"]}>
+              <AuthorRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="admin/requests"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminRequests />
             </ProtectedRoute>
           }
         />

@@ -39,9 +39,18 @@ export default function BooksTableRow({
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(bookData.status);
+  const chapterCount = bookData.chapters?.length ?? 0;
+  const hasPendingReviewRequest =
+    !!bookData.reviewRequest && !bookData.reviewRequest.reviewedAt;
+  const pendingRequestStatus = bookData.reviewRequest?.requestedStatus;
+  const pendingRequestLabel = hasPendingReviewRequest
+    ? pendingRequestStatus === "published"
+      ? "Publish request pending"
+      : "Archive request pending"
+    : null;
   const statusOptionsByCurrentStatus = {
-    draft: ["preview"],
-    preview: ["published", "archived"],
+    draft: ["preview", "published"],
+    preview: ["published"],
     published: ["archived"],
     archived: [],
   };
@@ -79,22 +88,51 @@ export default function BooksTableRow({
     }
     try {
       setIsUpdatingStatus(true);
-      const response = await sendRequest({
-        url: `/books/${bookData._id}/status`,
-        method: "put",
-        body: { status },
-      });
-      const updatedBook = response.book;
-      onBookStatusUpdated(updatedBook);
-      setPendingStatus(updatedBook.status);
+      let request;
+      switch (status) {
+        case "published":
+          request = {
+            url: `/books/${bookData._id}/submit-for-review`,
+            method: "post",
+          };
+          break;
+        case "archived":
+          request = {
+            url: `/books/${bookData._id}/request-archive`,
+            method: "post",
+          };
+          break;
+        default:
+          request = {
+            url: `/books/${bookData._id}/status`,
+            method: "put",
+            body: { status },
+          };
+      }
+
+      const response = await sendRequest(request);
+      if (status === "published" || status === "archived") {
+        onBookStatusUpdated({
+          ...bookData,
+          reviewRequest: {
+            requestedStatus: status,
+            requestedAt: new Date().toISOString(),
+          },
+        });
+      }
+
+      if (status === "published")
+        toast.success("Your publish request has been sent");
+      else if (status === "archived")
+        toast.success("Your archive request has been sent");
+      else {
+        const updatedBook = response.book;
+        onBookStatusUpdated(updatedBook);
+        setPendingStatus(updatedBook.status);
+      }
       setIsEditing(false);
       close();
       warningModalClose();
-      if (updatedBook.status === "published") {
-        toast.success("Your book has been published");
-      } else {
-        toast.success("Book status updated successfully");
-      }
     } catch (error) {
       console.error(error);
       setPendingStatus(bookData.status);
@@ -105,8 +143,9 @@ export default function BooksTableRow({
   };
 
   const isBookPublishable = (book) => {
-    if (!book.chapters || !(book.chapters.length > 1)) return false;
+    if (!book.chapters || book.chapters.length < 1) return false;
     if (book.status !== "draft") return false;
+    if (hasPendingReviewRequest) return false;
     if (!statusOptionsByCurrentStatus[book.status].includes("published"))
       return false;
 
@@ -165,7 +204,12 @@ export default function BooksTableRow({
               <Badge color="copper" variant="light">
                 {bookData.status}
               </Badge>
-              {availableStatusOptions.length > 0 && (
+              {pendingRequestLabel && (
+                <Badge color="moss" variant="light">
+                  {pendingRequestLabel}
+                </Badge>
+              )}
+              {availableStatusOptions.length > 0 && !hasPendingReviewRequest && (
                 <ActionIcon
                   variant="subtle"
                   color="gray"
@@ -224,7 +268,7 @@ export default function BooksTableRow({
             </Group>
           )}
         </Table.Td>
-        <Table.Td ta="center">{bookData.chapters.length + 1}</Table.Td>
+        <Table.Td ta="center">{chapterCount}</Table.Td>
         <Table.Td>
           <Text size="sm">
             {new Date(bookData.updatedAt).toLocaleDateString()}
@@ -243,7 +287,7 @@ export default function BooksTableRow({
               </ActionIcon>
             )}
 
-            {bookData.status === "preview" && (
+            {bookData.status === "preview" && !hasPendingReviewRequest && (
               <ActionIcon
                 variant="subtle"
                 color="copper"

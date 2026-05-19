@@ -18,6 +18,7 @@ import { Bell } from "lucide-react";
 import { useNotifications } from "../hooks/useNotifications";
 import { API_BASE_URL } from "../constants";
 import "./NotificationBell.css";
+import { useNavigate } from "react-router-dom";
 
 function NotificationItem({ notification, onOpen }) {
   const isUnread = !notification.readAt;
@@ -65,18 +66,14 @@ export function NotificationBell() {
   const { notifications, unreadCount, connected, markRead } =
     useNotifications();
   const [opened, setOpened] = useState(false);
-
+  const navigate = useNavigate();
   const handleOpenNotification = async (notification) => {
     if (!notification.readAt) {
       await markRead(notification._id);
     }
 
     if (notification.actionUrl) {
-      window.open(
-        `${API_BASE_URL}${notification.actionUrl}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
+      navigate(`${notification.actionUrl}`);
     }
   };
 

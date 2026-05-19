@@ -16,10 +16,12 @@ export default function PublishBookConfirmation({
   onConfirm,
   onActionLoading,
 }) {
+  const description = book.description ?? "No description provided.";
+  const chapterCount = book.chapters?.length ?? 0;
   const truncatedDescription =
-    book.description.length > 180
-      ? `${book.description.substring(0, 180)}...`
-      : book.description;
+    description.length > 180
+      ? `${description.substring(0, 180)}...`
+      : description;
 
   return (
     <Modal
@@ -30,7 +32,10 @@ export default function PublishBookConfirmation({
       size="lg"
     >
       <Stack gap="lg">
-        <Text c="dimmed">Review the book details before publishing.</Text>
+        <Text c="dimmed">
+          Review the book details before submitting a publish request for
+          admins.
+        </Text>
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
           <Paper withBorder radius="md" p="md">
@@ -47,7 +52,7 @@ export default function PublishBookConfirmation({
               Chapters
             </Text>
             <Text mt={6} fw={600}>
-              {book.chapters.length}
+              {chapterCount}
             </Text>
           </Paper>
 

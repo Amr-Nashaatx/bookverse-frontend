@@ -60,12 +60,7 @@ export default function BookCard({ book, selectionMode, onAddBookToShelf }) {
   }
 
   return (
-    <Link
-      key={book._id}
-      to={`/books/${book._id}`}
-      className="book-card"
-      state={{ book }}
-    >
+    <Link key={book._id} to={`/books/${book._id}`} className="book-card">
       <Card withBorder>
         <CardContent />
       </Card>

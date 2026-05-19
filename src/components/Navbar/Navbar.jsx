@@ -112,8 +112,19 @@ export default function Navbar() {
                     >
                       Manage My Books
                     </NavLink>
+                    <NavLink
+                      to="/author/requests"
+                      className={getNavLinkClassName}
+                    >
+                      My Requests
+                    </NavLink>
                   </>
                 ))}
+              {isLoggedIn && currentUser.role === "admin" && (
+                <NavLink to="/admin/requests" className={getNavLinkClassName}>
+                  Review Requests
+                </NavLink>
+              )}
             </div>
 
             <div className="app-navbar__auth-actions">
